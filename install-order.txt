@@ -1,0 +1,17 @@
+sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
+sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+sudo aptitude  update
+sudo aptitude upgrade -yq
+sudo aptitude install lxc-docker
+docker pull pknw1/hubicfuse
+mkdir -p /home/docker
+cd /home/docker
+git clone https://github.com/pknw1/docker-hubicfuse.git; docker build /home/docker/docker-hubicfuse --tag="pknw1/hubicfuse"
+git clone https://github.com/pknw1/docker-utorrent.git
+git clone https://github.com/pknw1/docker-sickrage-hubic.git
+git clone https://github.com/pknw1/docker-couchpotato-hubic.git
+git clone https://github.com/pknw1/docker-plex-hubic.git
+
+
+
+create own .hubicfuse

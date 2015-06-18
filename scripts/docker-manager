@@ -1,0 +1,61 @@
+#!/bin/bash
+
+
+case "$1" in
+        running)
+            docker ps
+            ;;
+         
+        stopped)
+            docker ps -a | grep -v Up
+            ;;
+         
+        stop)
+		case "$2" in
+			all)
+				docker ps -a |grep -v CONTAINER | awk '{print $1}' | xargs docker stop
+				;;
+			*)
+				echo $"Usage: $0 stop {all}"
+            			exit 1
+		esac
+            ;;
+        restart)
+		case "$2" in
+                        all)
+				docker ps -a |grep -v CONTAINER | awk '{print $1}' | xargs docker restart
+                                ;;
+			running)
+				 docker ps |grep -v CONTAINER | awk '{print $1}' | xargs docker restart
+				;;
+			stopped)
+				 docker ps -a |grep -v CONTAINER | grep -v Up | awk '{print $1}' | xargs docker restart
+				;;
+                        *)
+                                echo $"Usage: $0 restart {all|running|stopped}"
+                                exit 1
+                esac
+            ;;
+        clean)
+		docker ps -a | grep -v Up |grep -v CONTAINER| awk '{print $1}' | xargs docker rm
+            ;;
+
+	help)
+		echo $"		Usage: $0 {running|stopped|stop all|restart|clean|help}}"
+		echo ""
+                echo "          running			show active docker processes"
+                echo "          stopped			show inactive docker machines"
+                echo "          stop all			stop all docker instances cleanly, and then show all docker machines available"
+                echo "          restart all			restart all docker instances"
+                echo "          restart running 		restart all running docker instances"
+                echo "          restart stopped 		restart all stopped docker instances"
+                echo "          clean				remove all inactive docker machines"
+		echo "          help				This page"
+		;;
+         
+        *)
+            echo $"Usage: $0 {running|stopped|stop all|restart|clean|help}}"
+            exit 1
+ 
+esac
+
